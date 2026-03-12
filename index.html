@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+      <title>ZenPixl - Image Tool</title>
+      <meta name="theme-color" content="rgb(235 231 231)" />
+      <link rel="apple-touch-icon" href="icon.png" />
+      <link rel="icon" type="image/png" href="icon.png" />
+      <link rel="manifest" href="site.webmanifest" />
+      <meta name="apple-mobile-web-app-title" content="ZenPixl" />
+      <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,1,0&display=swap" rel="stylesheet"/>
+      <link rel="stylesheet" href="ui.css">
+      <script defer src="app.js"></script>
+   </head>
+   <body>
+      <input type="file" id="rz-file" accept="image/*"/>
+      <input type="file" id="br-file" accept="image/*"/>
+      <div class="top-bar">
+         <span class="material-symbols-rounded">auto_awesome_mosaic</span>
+         <h1>
+            <span class="znpxl">ZenPixl</span>
+            <span class="imgtool">Image Tool</span>
+         </h1>
+      </div>
+      <div class="tab-bar">
+         <button class="tab-btn active" id="tab-resize">
+         <span class="material-symbols-rounded">photo_size_select_large</span>
+         Resize
+         </button>
+         <button class="tab-btn" id="tab-radius">
+         <span class="material-symbols-rounded">rounded_corner</span>
+         Border Radius
+         </button>
+      </div>
+      <!--  RESIZE -->
+      <div class="tab-panel active" id="panel-resize">
+         <div class="card">
+            <p class="section-label">Upload</p>
+            <div class="drop-zone" id="rz-drop">
+               <span class="material-symbols-rounded">add_photo_alternate</span>
+               <p><strong>Click to upload</strong> or drag & drop<br/>PNG, JPG, WebP, SVG supported</p>
+            </div>
+            <div class="info-row" id="rz-info-row" style="display:none;">
+               <div class="info-chip">
+                  <span class="material-symbols-rounded">image</span>
+                  <span id="rz-filename">—</span>
+               </div>
+               <div class="info-chip">
+                  <span class="material-symbols-rounded">straighten</span>
+                  <span id="rz-origsize">—</span>
+               </div>
+               <div class="info-chip" id="rz-alpha-chip" style="display:none;">
+                  <span class="material-symbols-rounded">layers</span>
+                  <span>Transparent</span>
+               </div>
+            </div>
+            <div class="preview-wrap" id="rz-preview-wrap">
+               <p class="preview-label">Preview</p>
+               <div class="preview-img-wrap" id="rz-preview-box">
+                  <img id="rz-preview-img" src="" alt="preview"/>
+                  <span class="preview-badge" id="rz-badge">— × —</span>
+               </div>
+            </div>
+         </div>
+         <div class="card" id="rz-settings" style="display:none;">
+            <p class="section-label">Output Settings</p>
+            <div class="control-group">
+               <div class="control-row">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">zoom_in</span>Scale Factor
+                  </span>
+                  <span class="value-chip" id="rz-scale-chip">1×</span>
+               </div>
+               <div class="chip-row" id="rz-scale-btns">
+                  <button class="chip-btn" data-scale="0.25">0.25×</button>
+                  <button class="chip-btn" data-scale="0.5">0.5×</button>
+                  <button class="chip-btn" data-scale="0.75">0.75×</button>
+                  <button class="chip-btn active" data-scale="1">1×</button>
+                  <button class="chip-btn" data-scale="1.25">1.25×</button>
+                  <button class="chip-btn" data-scale="1.5">1.5×</button>
+                  <button class="chip-btn" data-scale="1.75">1.75×</button>
+                  <button class="chip-btn" data-scale="2">2×</button>
+                  <button class="chip-btn" data-scale="2.5">2.5×</button>
+                  <button class="chip-btn" data-scale="3">3×</button>
+               </div>
+            </div>
+            <div class="divider" style="margin-bottom:20px;"></div>
+            <div class="output-info">
+               <span class="material-symbols-rounded">open_with</span>
+               <div class="output-info-text">
+                  <span class="main" id="rz-out-dims">— × — px</span>
+                  <span class="sub" id="rz-out-ratio">Original ratio preserved</span>
+               </div>
+            </div>
+            <div class="format-row">
+               <div class="control-row" style="margin-bottom:10px;">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">file_present</span>Save Format
+                  </span>
+               </div>
+               <div class="format-chips" id="rz-format-chips">
+                  <button class="format-chip active" data-fmt="jpg">JPG<span class="fmt-sub">Lossy</span></button>
+                  <button class="format-chip" data-fmt="png">PNG<span class="fmt-sub">Lossless</span></button>
+                  <button class="format-chip" data-fmt="webp">WebP<span class="fmt-sub">Modern</span></button>
+               </div>
+            </div>
+            <div class="divider" style="margin-top:4px;margin-bottom:20px;"></div>
+            <div class="control-group" id="rz-quality-section">
+               <div class="control-row">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">high_quality</span>Quality
+                  </span>
+                  <span class="value-chip" id="rz-quality-val">92%</span>
+               </div>
+               <input type="range" class="md3-slider" id="rz-quality" min="10" max="100" value="92" step="1"/>
+               <div class="slider-hints"><span>Smaller file</span><span>Best quality</span></div>
+            </div>
+            <div class="divider" style="margin-bottom:20px;"></div>
+            <div class="actions">
+               <button class="btn-tonal" id="rz-reset">
+               <span class="material-symbols-rounded">restart_alt</span>Reset
+               </button>
+               <button class="btn-filled" id="rz-download">
+               <span class="material-symbols-rounded">download</span>
+               <span id="rz-dl-label">Download JPG</span>
+               </button>
+            </div>
+         </div>
+         <canvas id="rz-canvas" style="display:none;"></canvas>
+      </div>
+      <!--  BORDER RADIUS -->
+      <div class="tab-panel" id="panel-radius">
+         <div class="card">
+            <p class="section-label">Upload</p>
+            <div class="drop-zone" id="br-drop">
+               <span class="material-symbols-rounded">add_photo_alternate</span>
+               <p><strong>Click to upload</strong> or drag & drop<br/>PNG, JPG, WebP, SVG supported</p>
+            </div>
+            <div class="preview-wrap" id="br-preview-wrap">
+               <p class="preview-label">Preview</p>
+               <div class="preview-img-wrap checker">
+                  <canvas id="br-canvas"></canvas>
+               </div>
+            </div>
+         </div>
+         <div class="card" id="br-settings" style="display:none;">
+            <p class="section-label">Adjustments</p>
+            <div class="control-group">
+               <div class="control-row">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">rounded_corner</span>Border Radius
+                  </span>
+                  <span class="value-chip" id="br-radius-val">0px</span>
+               </div>
+               <input type="range" class="md3-slider" id="br-slider" min="0" max="50" value="0" step="1"/>
+               <div class="chip-row" id="br-presets">
+                  <button class="chip-btn active" data-value="0">None</button>
+                  <button class="chip-btn" data-value="8">Small</button>
+                  <button class="chip-btn" data-value="12">Medium</button>
+                  <button class="chip-btn" data-value="16">Large</button>
+                  <button class="chip-btn" data-value="28">X-Large</button>
+                  <button class="chip-btn" data-value="50">Circle</button>
+               </div>
+            </div>
+            <div class="divider" style="margin-bottom:20px;"></div>
+            <div class="format-row">
+               <div class="control-row" style="margin-bottom:10px;">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">file_present</span>Save Format
+                  </span>
+               </div>
+               <div class="format-chips" id="br-format-chips">
+                  <button class="format-chip active" data-fmt="png">PNG<span class="fmt-sub">Lossless</span></button>
+                  <button class="format-chip" data-fmt="jpg">JPG<span class="fmt-sub">Lossy</span></button>
+                  <button class="format-chip" data-fmt="webp">WebP<span class="fmt-sub">Modern</span></button>
+               </div>
+            </div>
+            <div class="divider" style="margin-top:4px;margin-bottom:20px;"></div>
+            <div class="control-group" id="br-quality-section" style="display:none;">
+               <div class="control-row">
+                  <span class="control-title">
+                  <span class="material-symbols-rounded">high_quality</span>Quality
+                  </span>
+                  <span class="value-chip" id="br-quality-val">92%</span>
+               </div>
+               <input type="range" class="md3-slider" id="br-quality" min="10" max="100" value="92" step="1"/>
+               <div class="slider-hints"><span>Smaller file</span><span>Best quality</span></div>
+            </div>
+            <div class="actions">
+               <button class="btn-tonal" id="br-reset">
+               <span class="material-symbols-rounded">restart_alt</span>Reset
+               </button>
+               <button class="btn-filled" id="br-download">
+               <span class="material-symbols-rounded">download</span>
+               <span id="br-dl-label">Save as PNG</span>
+               </button>
+            </div>
+         </div>
+      </div>
+      <div class="toast" id="toast">
+         <span class="material-symbols-rounded">check_circle</span>
+         <span id="toast-msg">Done!</span>
+      </div>
+   </body>
+</html>
