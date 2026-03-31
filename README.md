@@ -38,7 +38,7 @@
 - etc.
 
 <div align="center">
-<strong>Made with 🩶 by Zenlixir</strong>
+<strong>Made with ♥︎ by Zenlixir</strong>
 </div>
 
 <div align="center">
